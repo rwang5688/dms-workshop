@@ -127,7 +127,7 @@ Parameters:
   IAMRoleDmsVpcExist:
     Description: Does your AWS account already have dms-vpc-role(goto IAM>roles & search for "dms-vpc" to check) if this role is not there template will fail-rollback unless you change default Y to N?
     Type: String
-    Default: Y
+    Default: N
     AllowedValues:
       - Y
       - N
@@ -164,7 +164,7 @@ Conditions:
   Create-Oracle-to-AuroraPostgreSQL-Environment: !Equals [ !Ref LabType, 'Oracle to Amazon Aurora (PostgreSQL)' ]
   Create-Oracle-to-RDSOracle-Environment: !Equals [ !Ref LabType, 'Oracle to Amazon RDS Oracle' ]
   Create-Oracle-Environment: !Or [!Equals [ !Ref LabType, 'Oracle to Amazon Aurora (PostgreSQL)'], !Equals [ !Ref LabType, 'Oracle to Amazon RDS Oracle'], !Equals [ !Ref LabType, 'Oracle to Amazon RDS SQL Server'] ]
-  IAMRoleDmsVpcExist: !Equals [!Ref IAMRoleDmsVpcExist, 'N']
+  IAMRoleDmsVpcNotExist: !Equals [!Ref IAMRoleDmsVpcExist, 'N']
 
 Resources:
   DmsVpc:
@@ -303,7 +303,7 @@ Resources:
       VpcId: !Ref DmsVpc
   DMSVpcRole:
     Type: AWS::IAM::Role
-    Condition: IAMRoleDmsVpcExist
+    Condition: IAMRoleDmsVpcNotExist
     Properties:
       RoleName: dms-vpc-role
       AssumeRolePolicyDocument:
