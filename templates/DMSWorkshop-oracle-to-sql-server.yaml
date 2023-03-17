@@ -109,6 +109,7 @@ Parameters:
       - 'Microsoft SQL Server to Amazon S3'
       - 'Oracle to Amazon Aurora (PostgreSQL)'
       - 'Oracle to Amazon RDS Oracle'
+      - 'Oracle to Amazon RDS SQL Server'
     ConstraintDescription: Must select a lab environment from the options.
   KeyName:
     Description: Name of an existing EC2 KeyPair to enable RDP access to the instance
@@ -157,12 +158,12 @@ Parameters:
 
 Conditions:
   Create-SQLServer-to-AuroraMySQL-Environment: !Equals [ !Ref LabType, 'Microsoft SQL Server to Amazon Aurora (MySQL)' ]
-  Create-SQLServer-to-RDSSQLServer-Environment: !Equals [ !Ref LabType, 'Microsoft SQL Server to Amazon RDS SQL Server' ]
+  Create-SQLServer-to-RDSSQLServer-Environment: !Or [!Equals [ !Ref LabType, 'Microsoft SQL Server to Amazon RDS SQL Server' ], !Equals [ !Ref LabType, 'Oracle to Amazon RDS SQL Server' ] ] 
   Create-SQLServer-to-AuroraPostgreSQL-Environment: !Equals [ !Ref LabType, 'Microsoft SQL Server to Amazon Aurora (PostgreSQL)' ]
   Create-SQLServer-to-S3-Environment: !Equals [ !Ref LabType, 'Microsoft SQL Server to Amazon S3']
   Create-Oracle-to-AuroraPostgreSQL-Environment: !Equals [ !Ref LabType, 'Oracle to Amazon Aurora (PostgreSQL)' ]
   Create-Oracle-to-RDSOracle-Environment: !Equals [ !Ref LabType, 'Oracle to Amazon RDS Oracle' ]
-  Create-Oracle-Environment: !Or [!Equals [ !Ref LabType, 'Oracle to Amazon Aurora (PostgreSQL)'], !Equals [ !Ref LabType, 'Oracle to Amazon RDS Oracle'] ]
+  Create-Oracle-Environment: !Or [!Equals [ !Ref LabType, 'Oracle to Amazon Aurora (PostgreSQL)'], !Equals [ !Ref LabType, 'Oracle to Amazon RDS Oracle'], !Equals [ !Ref LabType, 'Oracle to Amazon RDS SQL Server'] ]
   IAMRoleDmsVpcExist: !Equals [!Ref IAMRoleDmsVpcExist, 'N']
 
 Resources:
@@ -780,7 +781,7 @@ Resources:
           Fn::Join:
           - "-"
           - - Ref: AWS::StackName
-            - AuroraMySQLInstance
+            - TargetSQLServer
       DBSubnetGroupName:
         Ref: DBSubnetGroup
       VPCSecurityGroups:
