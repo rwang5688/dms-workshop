@@ -476,7 +476,7 @@ Resources:
       MasterUsername: 'dbmaster'
       MasterUserPassword: 'dbmaster123'
       DBInstanceClass: !Ref RDSInstanceType
-      Engine: oracle-ee
+      Engine: oracle-se2
       EngineVersion: '19.0.0.0.ru-2022-04.rur-2022-04.r1'
       LicenseModel: license-included
       PubliclyAccessible: false
@@ -822,7 +822,7 @@ Resources:
       MasterUsername: 'dbmaster'
       MasterUserPassword: 'dbmaster123'
       DBInstanceClass: !Ref RDSInstanceType
-      Engine: oracle-ee
+      Engine: oracle-se2
       EngineVersion: '19.0.0.0.ru-2022-04.rur-2022-04.r1'
       LicenseModel: license-included
       PubliclyAccessible: false
